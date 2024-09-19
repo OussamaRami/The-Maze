@@ -1,5 +1,6 @@
 // player.c
 #include "player.h"
+#include <math.h>
 #include <SDL2/SDL.h>
 
 void handlePlayerInput(Game *game) {

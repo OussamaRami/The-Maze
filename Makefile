@@ -1,32 +1,23 @@
-# Makefile
-
 CC = gcc
-CFLAGS = -Wall -Wextra -g
-SDL_CFLAGS = $(shell sdl2-config --cflags)
-SDL_LDFLAGS = $(shell sdl2-config --libs) -lSDL2_image
-OBJS = main.o game.o player.o render.o
+CFLAGS = -I src/include -L src/lib
+LIBS = -lmingw32 -lSDL2main -lSDL2_image -lSDL2 -lm
 
-# Target executable
-TARGET = maze_game
+all: maze_game
 
-all: $(TARGET)
+maze_game: main.o player.o game.o render.o
+	$(CC) -o maze_game main.o player.o game.o render.o $(CFLAGS) $(LIBS)
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(SDL_LDFLAGS)
+main.o: main.c
+	$(CC) -c main.c $(CFLAGS)
 
-main.o: main.c game.h player.h render.h
-	$(CC) $(CFLAGS) $(SDL_CFLAGS) -c main.c
+player.o: player.c
+	$(CC) -c player.c $(CFLAGS)
 
-game.o: game.c game.h
-	$(CC) $(CFLAGS) $(SDL_CFLAGS) -c game.c
+game.o: game.c
+	$(CC) -c game.c $(CFLAGS)
 
-player.o: player.c player.h game.h
-	$(CC) $(CFLAGS) $(SDL_CFLAGS) -c player.c
-
-render.o: render.c render.h game.h
-	$(CC) $(CFLAGS) $(SDL_CFLAGS) -c render.c
+render.o: render.c
+	$(CC) -c render.c $(CFLAGS)
 
 clean:
-	rm -f *.o $(TARGET)
-
-.PHONY: all clean
+	rm -f *.o maze_game
